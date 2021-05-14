@@ -25,7 +25,7 @@ contract('Crud', () => {
     await crud.update(1, 'Frankk');
     const user = await crud.read(1);
     assert(user[0].toNumber() === 1);
-    assert(user[0] === 'Frankk');
+    assert(user[1] === 'Frankk');
   });
 
   it('Should NOT update a non-existing user', async () => {
