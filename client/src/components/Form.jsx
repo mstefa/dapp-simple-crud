@@ -1,10 +1,9 @@
 import React from 'react'
-import Web3 from 'web3';
-import Crud from '../data.json'
+
 
 // password password
 
-export default function Form() {
+export default function Form({crud, accounts}) {
 
   const [input, setInput] = React.useState({
     createName: '',
@@ -22,51 +21,10 @@ export default function Form() {
     
   }
 
-  let web3;
-  let crud;
-  let accounts = [];
-
-  const initWeb3 = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      console.log('MetaMask is installed!');
-      await window.ethereum.send('eth_requestAccounts');
-      web3 = new Web3(window.ethereum);
-      return true;
-    }
-    web3 = new Web3('http://localhost:9545')
-    return false;
-  }
-
-  const initContract = () => {
-    const deploymentKey = Object.keys(Crud.networks)[0];
-    console.log(deploymentKey)
-    console.log(`web3`, web3)
-    crud = new web3.eth.Contract(
-      Crud.abi,
-      Crud
-        .networks[deploymentKey]
-        .address
-    );
-    console.log(`crud`, crud)
-    return true
-  }
-
-  initWeb3()
-    .then(()=> {
-      // console.log('init web3')
-      // console.log(web3)
-      crud = initContract()
-      web3.eth.getAccounts()
-      .then(_accounts => {
-        accounts = _accounts;
-        // console.log(`accounts`, accounts)
-      })
-    })
-    .catch(e => console.error(e.message));
-
-    
   const handleCreate = (e) => {
     e.preventDefault();
+    console.log('hola!')
+    console.log(`crud`, crud)
     crud.methods.create(input.createName).send({from: accounts[0]})
     .then(result => {
       alert("User Create")
